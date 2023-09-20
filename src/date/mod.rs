@@ -92,9 +92,9 @@ fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> R
                     return Err(format!("Unexpected  `{}`", lit));
                 }
             }
-            TokenTree::Ident(idet) => {
+            TokenTree::Ident(ident) => {
                 #[cfg(feature = "and-time")]
-                if idet.to_string() == "at" {
+                if ident.to_string() == "at" {
                     if !parsing_date {
                         return Err(
                             "You've already specified the time, you can't specify it again"
@@ -105,7 +105,7 @@ fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> R
                     time_stamp = un_calc.calc()?;
                     continue;
                 }
-                return Err(format!("You can't use `{}` here, maybe you meant to enable the `and-time` feature", idet));
+                return Err(format!("You can't use `{}` here, maybe you meant to enable the `and-time` feature", ident));
             }
             _ => {
                 return Err(format!("Unexpected `{}`", nt));
