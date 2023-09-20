@@ -37,7 +37,8 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
         #[cfg(feature = "original-compatibility")]
         return quote!(core::todo!(#msg)).into();
         #[cfg(not(feature = "original-compatibility"))]
-        return quote!(compile_error!("You should specify at least one condition")).into();
+        return quote!(compile_error!("You should specify at least one condition, or if you do this accidentally, \
+        then maybe you want to enable the `original-compatibility` feature")).into();
     };
     if let TokenTree::Punct(punct) = nt {
         #[cfg(feature = "strict-syntax")]
