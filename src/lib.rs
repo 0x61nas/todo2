@@ -7,6 +7,7 @@ mod if_cond;
 extern crate proc_macro;
 
 use crate::date::parse_date;
+use crate::if_cond::parse_if;
 use proc_macro::token_stream::IntoIter;
 use proc_macro::{TokenStream, TokenTree};
 use quote::{quote, TokenStreamExt};
@@ -17,7 +18,7 @@ pub(crate) type Result<T> = std::result::Result<T, String>;
 
 enum ConditionTyp {
     By(u64),
-    If(TokenTree),
+    If(TokenStream),
 }
 
 #[proc_macro]
@@ -40,8 +41,10 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
         #[cfg(feature = "original-compatibility")]
         return TokenStream::from(quote!(core::todo!(#msg)));
         #[cfg(not(feature = "original-compatibility"))]
-        return TokenStream::from(quote!(compile_error!("You should specify at least one condition, or if you do this accidentally, \
-        then maybe you want to enable the `original-compatibility` feature")));
+        return TokenStream::from(quote!(compile_error!(
+            "You should specify at least one condition, or if you do this accidentally, \
+        then maybe you want to enable the `original-compatibility` feature"
+        )));
     };
     if let TokenTree::Punct(punct) = nt {
         #[cfg(feature = "strict-syntax")]
@@ -54,7 +57,9 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
         let _ = tokens.next();
     } else {
         #[cfg(feature = "strict-syntax")]
-        return TokenStream::from(quote!(compile_error!("Expected `,` or `;` after the massage")));
+        return TokenStream::from(quote!(compile_error!(
+            "Expected `,` or `;` after the massage"
+        )));
     }
     let conditions = match parse_conditions(&mut tokens) {
         Ok(conditions) => conditions,
@@ -67,11 +72,16 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
     for condition in conditions {
         match condition {
             ConditionTyp::By(time) => {
-                #[cfg(feature = "compile-error")] {
-                    let ct = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs();
+                #[cfg(feature = "compile-error")]
+                {
+                    let ct = SystemTime::now()
+                        .duration_since(SystemTime::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs();
 
                     if time <= ct {
-                        let msg = format!("TODO: The deadline for `{}` has passed, do it now!", msg);
+                        let msg =
+                            format!("TODO: The deadline for `{}` has passed, do it now!", msg);
                         return TokenStream::from(quote!(compile_error!(#msg)));
                     }
                 }
