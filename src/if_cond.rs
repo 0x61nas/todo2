@@ -1,8 +1,8 @@
 use crate::Result;
 use proc_macro2::token_stream::IntoIter;
 use proc_macro2::{TokenStream, TokenTree};
-use std::iter::Peekable;
 use quote::TokenStreamExt;
+use std::iter::Peekable;
 
 pub(crate) fn parse_if(tokens: &mut Peekable<IntoIter>) -> Result<TokenStream> {
     let mut rt = TokenStream::new();

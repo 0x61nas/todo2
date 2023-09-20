@@ -8,8 +8,8 @@ extern crate proc_macro;
 
 use crate::date::parse_date;
 use crate::if_cond::parse_if;
+use proc_macro::TokenStream;
 use proc_macro2::token_stream::IntoIter;
-use proc_macro::{TokenStream};
 use proc_macro2::TokenTree;
 use quote::{quote, TokenStreamExt};
 use std::iter::Peekable;
@@ -24,7 +24,9 @@ enum ConditionTyp {
 
 #[proc_macro]
 pub fn todo(tokens: TokenStream) -> TokenStream {
-    let mut tokens = proc_macro2::TokenStream::from(tokens).into_iter().peekable();
+    let mut tokens = proc_macro2::TokenStream::from(tokens)
+        .into_iter()
+        .peekable();
     // Parse the message, should be the first argument(at least for now)
     let msg = match parse_msg(&mut tokens) {
         Ok(msg) => {
