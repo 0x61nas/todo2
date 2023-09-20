@@ -8,7 +8,7 @@ extern crate proc_macro;
 use crate::date::parse_date;
 use proc_macro::token_stream::IntoIter;
 use proc_macro::{TokenStream, TokenTree};
-use quote::quote;
+use quote::{quote, TokenStreamExt};
 use std::iter::Peekable;
 use std::time::SystemTime;
 
@@ -60,25 +60,32 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
 
     let mut rt = quote!();
 
-    // let mut time_stamp = 0;
+    let mut time_stamp = 0;
     for condition in conditions {
         match condition {
             ConditionTyp::By(time) => {
                 #[cfg(feature = "compile-error")] {
                     let ct = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs();
+
                     if time <= ct {
                         let msg = format!("TODO: The deadline for `{}` has passed, do it now!", msg);
                         return quote!(compile_error!(#msg)).into();
                     }
                 }
                 // TODO: consider `no_std` compatibility?
-                rt = quote! {
-                    rt
+                #[cfg(not(any(feature = "with-chrono", feature = "with-time")))]
+                rt.append_all(quote! {
                     if #time <= ::std::time::SystemTime::now().duration_since(::std::time::SystemTime::UNIX_EPOCH).unwrap().as_secs() {
                         ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
                     }
-                }
-                // time_stamp = time;
+                });
+                #[cfg(feature = "with-chrono")]
+                rt.append_all(quote! {
+                    if #time <= ::chrono::Utc::now().timestamp() as u64 {
+                        ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
+                    }
+                });
+                time_stamp = time;
             }
             ConditionTyp::If(_) => {
                 core::todo!()

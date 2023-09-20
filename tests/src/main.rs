@@ -14,6 +14,12 @@ mod tests {
         todo!("Delete this test", by: 2023-9-20);
     }
 
+    #[test]
+    #[should_panic]
+    fn test_todo_with_time_work() {
+        todo!("Delete this test", by: 2023-9-20 at 9:00);
+    }
+
     /*    #[test]
     #[should_panic]
     fn test_todo_panic() {

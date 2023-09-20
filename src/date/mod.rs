@@ -7,7 +7,7 @@ use std::iter::Peekable;
 
 pub(crate) fn parse_date(tokens: &mut Peekable<IntoIter>) -> Result<u64, String> {
     #[cfg(feature = "chrono-backend")]
-    let un_calc = crate::date::unix_time::chrono::ChronoCalc::new();
+    let un_calc = unix_time::chrono::ChronoCalc::new();
     #[cfg(feature = "time-backend")]
     let un_calc = crate::date::unix_time::time::TimeCalc::new();
     #[cfg(not(any(feature = "chrono-backend", feature = "time-backend")))]
