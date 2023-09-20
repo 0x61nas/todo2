@@ -1,0 +1,44 @@
+[package]
+name = "todo-or-die"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies.log]
+version = "0.4.20"
+optional = true
+
+[dependencies.chrono]
+version = "0.4.30"
+optional = true
+
+[dependencies.time]
+version = "0.3.28"
+optional = true
+
+[dependencies.quote]
+version = "1.0.33"
+features = ["proc-macro"]
+
+[features]
+default = ["logit", "original-compatibility", "strict-syntax", "and-time"]
+logit = ["log"]
+panic = []
+compile-error = []
+with-chrono = ["chrono"]
+with-time = ["time"]
+chrono-backend = ["chrono"]
+time-backend = ["time"]
+original-compatibility = []
+strict = ["original-compatibility", "compile-error"]
+strict-syntax = []
+be-cool = []
+# In the `by` syntax, make it able to specify a time
+and-time = []
+
+[lib]
+proc-macro = true
+
+[workspace]
+members = [
+	"tests",
+	]
