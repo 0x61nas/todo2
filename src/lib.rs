@@ -98,6 +98,12 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                         ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
                     }
                 });
+                #[cfg(feature = "with-time")]
+                rt.append_all(quote! {
+                    if #time <= ::time::OffsetDateTime::now_utc().unix_timestamp() as u64 {
+                        ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
+                    }
+                });
                 time_stamp = time;
             }
             ConditionTyp::If(_) => {
