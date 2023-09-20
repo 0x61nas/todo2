@@ -95,7 +95,7 @@ fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> R
             }
             TokenTree::Ident(ident) => {
                 #[cfg(feature = "and-time")]
-                if ident.to_string() == "at" {
+                if ident == "at" {
                     if !parsing_date {
                         return Err(
                             "You've already specified the time, you can't specify it again"

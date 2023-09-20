@@ -13,7 +13,7 @@ use proc_macro2::token_stream::IntoIter;
 use proc_macro2::TokenTree;
 use quote::{quote, TokenStreamExt};
 use std::iter::Peekable;
-use std::time::SystemTime;
+
 
 pub(crate) type Result<T> = std::result::Result<T, String>;
 
@@ -71,14 +71,14 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
 
     let mut rt = quote!();
 
-    let mut time_stamp = 0;
+    // let mut time_stamp = 0;
     for condition in conditions {
         match condition {
             ConditionTyp::By(time) => {
                 #[cfg(feature = "compile-error")]
                 {
-                    let ct = SystemTime::now()
-                        .duration_since(SystemTime::UNIX_EPOCH)
+                    let ct = std::time::SystemTime::now()
+                        .duration_since(std::time::SystemTime::UNIX_EPOCH)
                         .unwrap()
                         .as_secs();
 
@@ -107,7 +107,7 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                         ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
                     }
                 });
-                time_stamp = time;
+                // time_stamp = time;
             }
             ConditionTyp::If(if_cond) => {
                 let msg = format!("TODO: {}", msg);
