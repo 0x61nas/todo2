@@ -5,6 +5,8 @@ pub(super) mod simple;
 #[cfg(feature = "time-backend")]
 pub(super) mod time;
 
+use crate::Result;
+
 pub(super) const ONE_HOUR: u64 = 3600;
 
 pub(super) trait UnixTimeCalc {
@@ -12,13 +14,13 @@ pub(super) trait UnixTimeCalc {
     fn is_leap_year(year: u32) -> bool {
         year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
     }
-    fn year(&mut self, year: String) -> Result<(), String>;
-    fn month(&mut self, month: String) -> Result<(), String>;
-    fn day(&mut self, day: String) -> Result<(), String>;
+    fn year(&mut self, year: String) -> Result<()>;
+    fn month(&mut self, month: String) -> Result<()>;
+    fn day(&mut self, day: String) -> Result<()>;
     fn is_year_set(&self) -> bool;
     fn is_month_set(&self) -> bool;
     fn is_day_set(&self) -> bool;
-    fn calc(&self) -> Result<u64, String>;
+    fn calc(&self) -> Result<u64>;
 }
 
 macro_rules! impl_unixtime_calc {
@@ -32,17 +34,17 @@ macro_rules! impl_unixtime_calc {
                     }
                 }
 
-                fn year(&mut self, year: String) -> Result<(), String> {
+                fn year(&mut self, year: String) -> Result<()> {
                     self.year = year.parse::<i32>().map_err(|_| "Invalid year")?;
                     Ok(())
                 }
 
-                fn month(&mut self, month: String) -> Result<(), String> {
+                fn month(&mut self, month: String) -> Result<()> {
                     self.month = Some(month.parse::<$mt>().map_err(|_| "Invalid month")?);
                     Ok(())
                 }
 
-                fn day(&mut self, day: String) -> Result<(), String> {
+                fn day(&mut self, day: String) -> Result<()> {
                     self.day = Some(day.parse::<$dt>().map_err(|_| "Invalid day")?);
                     Ok(())
                 }
@@ -59,7 +61,7 @@ macro_rules! impl_unixtime_calc {
                     self.day.is_some()
                 }
 
-                fn calc(&self) -> Result<u64, String> {
+                fn calc(&self) -> Result<u64> {
                     self._calc()
                 }
             }

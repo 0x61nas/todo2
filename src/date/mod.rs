@@ -1,22 +1,23 @@
 mod unix_time;
 
 use crate::date::unix_time::{UnixTimeCalc, ONE_HOUR};
+use crate::Result;
 use proc_macro::token_stream::IntoIter;
 use proc_macro::TokenTree;
 use std::iter::Peekable;
 
-pub(crate) fn parse_date(tokens: &mut Peekable<IntoIter>) -> Result<u64, String> {
+pub(crate) fn parse_date(tokens: &mut Peekable<IntoIter>) -> Result<u64> {
     #[cfg(feature = "chrono-backend")]
     let un_calc = unix_time::chrono::ChronoCalc::new();
     #[cfg(feature = "time-backend")]
-    let un_calc = crate::date::unix_time::time::TimeCalc::new();
+    let un_calc = unix_time::time::TimeCalc::new();
     #[cfg(not(any(feature = "chrono-backend", feature = "time-backend")))]
     let un_calc = unix_time::simple::SimpleCalc::new();
 
     _parse(tokens, un_calc)
 }
 
-fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> Result<u64, String> {
+fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> Result<u64> {
     let mut time_stamp = 0;
     #[cfg(feature = "and-time")]
     let mut parsing_date = true;

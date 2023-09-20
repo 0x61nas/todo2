@@ -2,6 +2,7 @@
 compile_error!("You can only use one backend at a time");
 
 mod date;
+mod if_cond;
 
 extern crate proc_macro;
 
@@ -11,6 +12,8 @@ use proc_macro::{TokenStream, TokenTree};
 use quote::{quote, TokenStreamExt};
 use std::iter::Peekable;
 use std::time::SystemTime;
+
+pub(crate) type Result<T> = std::result::Result<T, String>;
 
 enum ConditionTyp {
     By(u64),
@@ -105,7 +108,7 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
     TokenStream::from(rt)
 }
 
-fn parse_msg(tokens: &mut Peekable<IntoIter>) -> Result<Option<String>, String> {
+fn parse_msg(tokens: &mut Peekable<IntoIter>) -> Result<Option<String>> {
     let Some(first_token) = tokens.next() else {
         #[cfg(not(feature = "original-compatibility"))]
         return Err("Seems like there is no arguments".to_string());
@@ -119,7 +122,7 @@ fn parse_msg(tokens: &mut Peekable<IntoIter>) -> Result<Option<String>, String> 
     }
 }
 
-fn parse_conditions(tokens: &mut Peekable<IntoIter>) -> Result<Vec<ConditionTyp>, String> {
+fn parse_conditions(tokens: &mut Peekable<IntoIter>) -> Result<Vec<ConditionTyp>> {
     let mut conditions = Vec::with_capacity(2);
     while let Some(token) = tokens.next() {
         match token {
@@ -135,9 +138,7 @@ fn parse_conditions(tokens: &mut Peekable<IntoIter>) -> Result<Vec<ConditionTyp>
                 }
                 match ident.to_string().as_str() {
                     "by" => conditions.push(ConditionTyp::By(parse_date(tokens)?)),
-                    "if" => {
-                        core::todo!()
-                    }
+                    "if" => conditions.push(ConditionTyp::If(parse_if(tokens)?)),
                     _ => return Err("Expected `by` or `if`".to_string()),
                 }
             }

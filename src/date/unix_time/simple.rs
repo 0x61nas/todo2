@@ -1,6 +1,7 @@
 use crate::date::unix_time::UnixTimeCalc;
+use crate::Result;
 
-const EGHT_HOURS: u64 = 28_798;
+const EIGHT_HOURS: u64 = 28_798;
 const ONE_DAY: u64 = 86_400;
 const ONE_MONTH: u64 = 2_629_743;
 const ONE_YEAR: u64 = 31_556_926;
@@ -18,19 +19,19 @@ impl UnixTimeCalc for SimpleCalc {
         }
     }
 
-    fn year(&mut self, year: String) -> Result<(), String> {
+    fn year(&mut self, year: String) -> Result<()> {
         self.time_stamp += (year.parse::<u64>().map_err(|_| "Invalid year")? - 1970) * ONE_YEAR;
         self.counter += 1;
         Ok(())
     }
 
-    fn month(&mut self, month: String) -> Result<(), String> {
+    fn month(&mut self, month: String) -> Result<()> {
         self.time_stamp += month.parse::<u64>().map_err(|_| "Invalid month")? * ONE_MONTH;
         self.counter += 1;
         Ok(())
     }
 
-    fn day(&mut self, day: String) -> Result<(), String> {
+    fn day(&mut self, day: String) -> Result<()> {
         self.time_stamp += day.parse::<u64>().map_err(|_| "Invalid day")? * ONE_DAY;
         self.counter += 1;
         Ok(())
@@ -48,7 +49,7 @@ impl UnixTimeCalc for SimpleCalc {
         self.counter >= 3
     }
 
-    fn calc(&self) -> Result<u64, String> {
-        Ok(self.time_stamp - ONE_MONTH - ONE_DAY - EGHT_HOURS)
+    fn calc(&self) -> Result<u64> {
+        Ok(self.time_stamp - ONE_MONTH - ONE_DAY - EIGHT_HOURS)
     }
 }
