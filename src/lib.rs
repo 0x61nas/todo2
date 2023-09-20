@@ -27,35 +27,35 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                 let msg = msg.trim_matches(|c| c == '"' || c == '\'');
                 msg.to_string()
             } else {
-                return quote!(core::todo!()).into();
+                return TokenStream::from(quote!(core::todo!()));
             }
         }
-        Err(e) => return quote!(compile_error!(#e)).into(),
+        Err(e) => return TokenStream::from(quote!(compile_error!(#e))),
     };
     let Some(nt) = tokens.peek() else {
         // If there no other tokens, then that means that the user wanna use the original `todo` macro
         #[cfg(feature = "original-compatibility")]
-        return quote!(core::todo!(#msg)).into();
+        return TokenStream::from(quote!(core::todo!(#msg)));
         #[cfg(not(feature = "original-compatibility"))]
-        return quote!(compile_error!("You should specify at least one condition, or if you do this accidentally, \
-        then maybe you want to enable the `original-compatibility` feature")).into();
+        return TokenStream::from(quote!(compile_error!("You should specify at least one condition, or if you do this accidentally, \
+        then maybe you want to enable the `original-compatibility` feature")));
     };
     if let TokenTree::Punct(punct) = nt {
         #[cfg(feature = "strict-syntax")]
         {
             let punct = punct.as_char();
             if punct != ',' && punct != ';' {
-                return quote!(compile_error!("Unexpected `{}`", #punct)).into();
+                return TokenStream::from(quote!(compile_error!("Unexpected `{}`", #punct)));
             }
         }
         let _ = tokens.next();
     } else {
         #[cfg(feature = "strict-syntax")]
-        return quote!(compile_error!("Expected `,` or `;` after the massage")).into();
+        return TokenStream::from(quote!(compile_error!("Expected `,` or `;` after the massage")));
     }
     let conditions = match parse_conditions(&mut tokens) {
         Ok(conditions) => conditions,
-        Err(e) => return quote!(compile_error!(#e)).into(),
+        Err(e) => return TokenStream::from(quote!(compile_error!(#e))),
     };
 
     let mut rt = quote!();
@@ -69,7 +69,7 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
 
                     if time <= ct {
                         let msg = format!("TODO: The deadline for `{}` has passed, do it now!", msg);
-                        return quote!(compile_error!(#msg)).into();
+                        return TokenStream::from(quote!(compile_error!(#msg)));
                     }
                 }
                 // TODO: consider `no_std` compatibility?
@@ -102,7 +102,7 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
         println!("TODO: {}", #ct);
     };*/
 
-    rt.into()
+    TokenStream::from(rt)
 }
 
 fn parse_msg(tokens: &mut Peekable<IntoIter>) -> Result<Option<String>, String> {
