@@ -8,8 +8,9 @@ extern crate proc_macro;
 
 use crate::date::parse_date;
 use crate::if_cond::parse_if;
-use proc_macro::token_stream::IntoIter;
-use proc_macro::{TokenStream, TokenTree};
+use proc_macro2::token_stream::IntoIter;
+use proc_macro::{TokenStream};
+use proc_macro2::TokenTree;
 use quote::{quote, TokenStreamExt};
 use std::iter::Peekable;
 use std::time::SystemTime;
@@ -18,12 +19,12 @@ pub(crate) type Result<T> = std::result::Result<T, String>;
 
 enum ConditionTyp {
     By(u64),
-    If(TokenStream),
+    If(proc_macro2::TokenStream),
 }
 
 #[proc_macro]
 pub fn todo(tokens: TokenStream) -> TokenStream {
-    let mut tokens = tokens.into_iter().peekable();
+    let mut tokens = proc_macro2::TokenStream::from(tokens).into_iter().peekable();
     // Parse the message, should be the first argument(at least for now)
     let msg = match parse_msg(&mut tokens) {
         Ok(msg) => {
@@ -61,7 +62,7 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
             "Expected `,` or `;` after the massage"
         )));
     }
-    let conditions = match parse_conditions(&mut tokens) {
+    let conditions = match parse_conditions(tokens) {
         Ok(conditions) => conditions,
         Err(e) => return TokenStream::from(quote!(compile_error!(#e))),
     };
@@ -106,8 +107,13 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                 });
                 time_stamp = time;
             }
-            ConditionTyp::If(_) => {
-                core::todo!()
+            ConditionTyp::If(if_cond) => {
+                let msg = format!("TODO: {}", msg);
+                rt.append_all(quote! {
+                    if #if_cond {
+                        ::core::panic!(#msg);
+                    }
+                });
             }
         }
     }
@@ -138,7 +144,7 @@ fn parse_msg(tokens: &mut Peekable<IntoIter>) -> Result<Option<String>> {
     }
 }
 
-fn parse_conditions(tokens: &mut Peekable<IntoIter>) -> Result<Vec<ConditionTyp>> {
+fn parse_conditions(mut tokens: Peekable<IntoIter>) -> Result<Vec<ConditionTyp>> {
     let mut conditions = Vec::with_capacity(2);
     while let Some(token) = tokens.next() {
         match token {
@@ -153,8 +159,8 @@ fn parse_conditions(tokens: &mut Peekable<IntoIter>) -> Result<Vec<ConditionTyp>
                     return Err(format!("Expected `:` after `{}` got `{}`", ident, punct));
                 }
                 match ident.to_string().as_str() {
-                    "by" => conditions.push(ConditionTyp::By(parse_date(tokens)?)),
-                    "if" => conditions.push(ConditionTyp::If(parse_if(tokens)?)),
+                    "by" => conditions.push(ConditionTyp::By(parse_date(&mut tokens)?)),
+                    "if" => conditions.push(ConditionTyp::If(parse_if(&mut tokens)?)),
                     _ => return Err("Expected `by` or `if`".to_string()),
                 }
             }

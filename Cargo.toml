@@ -19,6 +19,9 @@ optional = true
 version = "1.0.33"
 features = ["proc-macro"]
 
+[dependencies.proc-macro2]
+version = "1.0.67"
+
 [features]
 default = ["logit", "original-compatibility", "strict-syntax", "and-time", "time-backend"]
 logit = ["log"]

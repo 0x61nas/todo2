@@ -2,8 +2,8 @@ mod unix_time;
 
 use crate::date::unix_time::{UnixTimeCalc, ONE_HOUR};
 use crate::Result;
-use proc_macro::token_stream::IntoIter;
-use proc_macro::TokenTree;
+use proc_macro2::token_stream::IntoIter;
+use proc_macro2::TokenTree;
 use std::iter::Peekable;
 
 pub(crate) fn parse_date(tokens: &mut Peekable<IntoIter>) -> Result<u64> {
