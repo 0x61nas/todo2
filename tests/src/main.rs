@@ -1,4 +1,4 @@
-use todo_or_die::todo;
+use todo2::todo;
 
 fn main() {
     todo!("Hi", by: 2024-01-01);
@@ -6,7 +6,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use todo_or_die::todo;
+    use todo2::todo;
 
     #[test]
     #[should_panic]

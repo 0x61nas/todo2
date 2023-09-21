@@ -1,5 +1,5 @@
 [package]
-name = "todo-or-die"
+name = "todo2"
 version = "0.1.0"
 edition = "2021"
 
@@ -25,7 +25,6 @@ version = "1.0.67"
 [features]
 default = ["logit", "original-compatibility", "strict-syntax", "and-time", "time-backend"]
 logit = ["log"]
-panic = []
 compile-error = []
 with-chrono = ["chrono"]
 with-time = ["time"]
@@ -34,7 +33,7 @@ time-backend = ["time"]
 original-compatibility = []
 strict = ["original-compatibility", "compile-error"]
 strict-syntax = []
-be-cool = []
+am-cool = []
 # In the `by` syntax, make it able to specify a time
 and-time = []
 
