@@ -110,7 +110,7 @@ and I don't want to deal with this complexity 'cause I'm lazy and this is a "pro
 so I implemented a simple algorithm to calculate the unix time stamp, which is not accurate, but it works. hmm, kinda.
 
 ### Backends
-and that's why we have the `with-chrono` and the `with-time` features, to use the `chrono` or the `time` crate to calculate the unix time stamp instead of the default implementation.
+and that's why we have the `chrono-backend` and the `time-backend` features, to use the `chrono` or the `time` crate to calculate the unix time stamp instead of the default implementation.
 
 I encourage you to enable one of them if you don't have a problem with adding yet another dependence to your project dependencies tree, or if you already have one of them in your dependencies already.
 at least until we have a better implementation for the default backend.
