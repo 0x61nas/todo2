@@ -37,7 +37,3 @@ and-time = []
 proc-macro = true
 path = "src/lib.rs"
 
-[workspace]
-members = [
-	"tests",
-	]

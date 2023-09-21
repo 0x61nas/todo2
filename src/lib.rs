@@ -61,7 +61,7 @@
 //! # and of course, our beloved `todo2` crate
 //! todo2 = { version = "0.1.0", features = ["log"] }
 //! ```
-//! ```rust,no_run
+//! ```rust,ignore
 //! #[macro_use]
 //! extern crate todo2;
 //! #[macro_use]
@@ -87,7 +87,7 @@
 //! ```sh
 //! cargo add todo2 --features compile-error
 //! ```
-//! ```rust,no_run
+//! ```rust,ignore
 //! #[macro_use]
 //! extern crate todo2;
 //!
@@ -120,21 +120,21 @@
 //! - [ ] Implement the `with-chrono` feature, to enable the user to use the [`chrono::Utc`](https://docs.rs/chrono/latest/chrono/struct.Utc.html) or [`chrono::DateTime`](https://docs.rs/chrono/latest/chrono/struct.DateTime.html) types
 //! to specify the deadline for the `by` condition instead of the raw date.
 //! example:
-//! ```rust,no_run
+//! ```rust,ignore
 //! # #[macro_use]
 //! # extern crate todo2;
 //! todo!("Make a cool crate", by: chrono::Utc.with_ymd_and_hms(2024, 02, 02, 9, 0, 0));
 //! ```
 //! - [ ] Implement the `with-time` feature, to enable the user to use the [`time::OffsetDateTime`](https://docs.rs/time/latest/time/struct.OffsetDateTime.html) type or the [`time::macros::datetime`](https://docs.rs/time/0.3.28/time/macros/macro.datetime.html) macro to specify the deadline for the `by` condition instead of the raw date.
 //! example:
-//! ```rust,no_run
+//! ```rust,ignore
 //! # #[macro_use]
 //! # extern crate todo2;
 //! todo!("Make a cool crate", by: time::macros::datetime!(2024-02-02 09:00:00));
 //! ```
 //! - [ ] Make the `if` condition parser able to evaluate some conditions at compile time, so we can use the `compile-error` feature with the `if` condition.
 //! example:
-//! ```rust,no_run
+//! ```rust,ignore
 //! # #[macro_use]
 //! # extern crate todo2;
 //! # fn main() {
@@ -283,7 +283,8 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                     }
                 }
                 // TODO: consider `no_std` compatibility?
-                #[cfg(not(any(feature = "with-chrono", feature = "with-time")))] {
+                #[cfg(not(any(feature = "with-chrono", feature = "with-time")))]
+                {
                     if cfg!(feature = "log") {
                         rt.append_all(quote! {
                             if #time <= ::std::time::SystemTime::now().duration_since(::std::time::SystemTime::UNIX_EPOCH).unwrap().as_secs() {
@@ -298,7 +299,8 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                         });
                     }
                 }
-                #[cfg(feature = "with-chrono")] {
+                #[cfg(feature = "with-chrono")]
+                {
                     if cfg!(feature = "log") {
                         rt.append_all(quote! {
                             if #time <= ::chrono::Utc::now().timestamp() as u64 {
@@ -313,7 +315,8 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                         });
                     }
                 }
-                #[cfg(feature = "with-time")] {
+                #[cfg(feature = "with-time")]
+                {
                     if cfg!(feature = "log") {
                         rt.append_all(quote! {
                             if #time <= ::time::OffsetDateTime::now_utc().unix_timestamp() as u64 {
