@@ -3,10 +3,6 @@ name = "todo2"
 version = "0.1.0"
 edition = "2021"
 
-[dependencies.log]
-version = "0.4.20"
-optional = true
-
 [dependencies.chrono]
 version = "0.4.30"
 optional = true
@@ -23,13 +19,13 @@ features = ["proc-macro"]
 version = "1.0.67"
 
 [features]
-default = ["logit", "original-compatibility", "strict-syntax", "and-time", "time-backend"]
-logit = ["log"]
+default = ["original-compatibility", "strict-syntax", "and-time", "time-backend"]
+log = []
 compile-error = []
-with-chrono = ["chrono"]
-with-time = ["time"]
-chrono-backend = ["chrono"]
-time-backend = ["time"]
+with-chrono = ["chrono", "and-time"]
+with-time = ["time", "and-time"]
+chrono-backend = ["chrono", "and-time"]
+time-backend = ["time", "and-time"]
 original-compatibility = []
 strict = ["original-compatibility", "compile-error"]
 strict-syntax = []
