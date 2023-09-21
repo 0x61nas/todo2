@@ -65,7 +65,7 @@
 //! #[macro_use]
 //! extern crate todo2;
 //! #[macro_use]
-//! extern crate log;
+//! extern crate log;84410fec9671b2d3a9c1c3af7d251bee
 //!
 //! use simple_logger::SimpleLogger;
 //!
@@ -150,10 +150,13 @@
 //!
 //! # License
 //! This project is licensed under the MIT license. [Read more](https://github.com/0x61nas/todo2/blob/aurora/LICENSE)
+//! And you can use it under the Unlicense license if you want. [Read more](https://github.com/0x61nas/todo2/blob/aurora/LICENSE-UNLICENSE)
 //!
 
 #[cfg(all(feature = "chrono-backend", feature = "time-backend"))]
 compile_error!("You can only use one backend at a time");
+#[cfg(all(feature = "log", feature = "compile-error"))]
+compile_error!("You can only use one of the `log` or the `compile-error` features at a time");
 
 mod date;
 mod if_cond;
@@ -267,6 +270,7 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
     for condition in conditions {
         match condition {
             ConditionTyp::By(time) => {
+                let msg = format!("TODO: The deadline for `{}` has passed, do it now!", msg);
                 #[cfg(feature = "compile-error")]
                 {
                     let ct = std::time::SystemTime::now()
@@ -275,30 +279,55 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                         .as_secs();
 
                     if time <= ct {
-                        let msg =
-                            format!("TODO: The deadline for `{}` has passed, do it now!", msg);
                         return TokenStream::from(quote!(compile_error!(#msg)));
                     }
                 }
                 // TODO: consider `no_std` compatibility?
-                #[cfg(not(any(feature = "with-chrono", feature = "with-time")))]
-                rt.append_all(quote! {
-                    if #time <= ::std::time::SystemTime::now().duration_since(::std::time::SystemTime::UNIX_EPOCH).unwrap().as_secs() {
-                        ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
+                #[cfg(not(any(feature = "with-chrono", feature = "with-time")))] {
+                    if cfg!(feature = "log") {
+                        rt.append_all(quote! {
+                            if #time <= ::std::time::SystemTime::now().duration_since(::std::time::SystemTime::UNIX_EPOCH).unwrap().as_secs() {
+                                ::log::error!(#msg);
+                            }
+                        });
+                    } else {
+                        rt.append_all(quote! {
+                            if #time <= ::std::time::SystemTime::now().duration_since(::std::time::SystemTime::UNIX_EPOCH).unwrap().as_secs() {
+                                ::core::panic!(#msg);
+                            }
+                        });
                     }
-                });
-                #[cfg(feature = "with-chrono")]
-                rt.append_all(quote! {
-                    if #time <= ::chrono::Utc::now().timestamp() as u64 {
-                        ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
+                }
+                #[cfg(feature = "with-chrono")] {
+                    if cfg!(feature = "log") {
+                        rt.append_all(quote! {
+                            if #time <= ::chrono::Utc::now().timestamp() as u64 {
+                                ::log::error!(#msg);
+                            }
+                        });
+                    } else {
+                        rt.append_all(quote! {
+                            if #time <= ::chrono::Utc::now().timestamp() as u64 {
+                                ::core::panic!(#msg);
+                            }
+                        });
                     }
-                });
-                #[cfg(feature = "with-time")]
-                rt.append_all(quote! {
-                    if #time <= ::time::OffsetDateTime::now_utc().unix_timestamp() as u64 {
-                        ::core::panic!("TODO: The deadline for `{}` has passed, do it now!", #msg);
+                }
+                #[cfg(feature = "with-time")] {
+                    if cfg!(feature = "log") {
+                        rt.append_all(quote! {
+                            if #time <= ::time::OffsetDateTime::now_utc().unix_timestamp() as u64 {
+                                ::log::error!(#msg);
+                            }
+                        });
+                    } else {
+                        rt.append_all(quote! {
+                            if #time <= ::time::OffsetDateTime::now_utc().unix_timestamp() as u64 {
+                                ::core::panic!(#msg);
+                            }
+                        });
                     }
-                });
+                }
                 // time_stamp = time;
             }
             ConditionTyp::If(if_cond) => {
