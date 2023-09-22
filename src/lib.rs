@@ -39,15 +39,16 @@
 //! # Features
 //! - `log` - Just logs an error instead of panicking or emitting a compile error, this may useful in the serious projects, this feature respects that you have added the `log` crate to your dependencies
 //! - `compile-error` - Emits a compile error instead of panicking.
-//! - `with-chrono` - Enables the `chrono` this enables you to specify the deadline for the `by` condition using the [`chrono::Utc`](https://docs.rs/chrono/latest/chrono/struct.Utc.html) or [`chrono::DateTime`](https://docs.rs/chrono/latest/chrono/struct.DateTime.html) types. [not implemented yet](#Maybe?)
-//! - `with-time` - Enables the `time` this enables you to specify the deadline for the `by` condition using the [`time::OffsetDateTime`](https://docs.rs/time/latest/time/struct.OffsetDateTime.html) type or the [`time::macros::datetime`](https://docs.rs/time/0.3.28/time/macros/macro.datetime.html) macro. [not implemented yet](#Maybe?)
+//! - `with-chrono` - Enables the `chrono` this enables you to specify the deadline for the `by` condition using the [`chrono::Utc`](https://docs.rs/chrono/latest/chrono/struct.Utc.html) or [`chrono::DateTime`](https://docs.rs/chrono/latest/chrono/struct.DateTime.html) types. [not implemented yet](#maybe)
+//! - `with-time` - Enables the `time` this enables you to specify the deadline for the `by` condition using the [`time::OffsetDateTime`](https://docs.rs/time/latest/time/struct.OffsetDateTime.html) type or the [`time::macros::datetime`](https://docs.rs/time/0.3.28/time/macros/macro.datetime.html) macro. [not implemented yet](#maybe)
 //! - `and-time` - allows you to specify a specific time of the day in the `by` condition
 //! - `original-compatibility` - Allows you to use this macro without pass any arguments, or with only the message.
 //! - `strict-syntax` - Enables the strict syntax,, just too force you to put a comma or a semicolon after the message.
 //! - `chrono-backend` - Use the `chrono` as the backend instead of the default implementation for the `by` condition to calculate the unix time stamp. I prefer to enable this feature if I have chrono in the dependencies, because it's more accurate than the default implementation. [Read more](#Backends)
 //! - `time-backend` - Use the `time` as the backend instead of the default implementation for the `by` condition to calculate the unix time stamp. I prefer to enable this feature if I have time in the dependencies, because it's more accurate than the default implementation. [Read more](#Backends)
 //! - `am-cool` - To indicate that you are cool. I love you.
-//! The default features are: `original-compatibility`, `strict-syntax`, `and-time`.
+//!
+//! The default features are: `original-compatibility`, `strict-syntax`, `and-time`, `time-backend`.
 //!
 //! # Examples
 //! ## Using the `log` feature
