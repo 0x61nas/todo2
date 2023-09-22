@@ -47,7 +47,7 @@ fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> R
                     parsing_date = false;
                     time_stamp = un_calc.calc()?;
                     continue;
-                } else if !parsing_date && (punct == ':' || punct == '.') {
+                } else if !parsing_date && punct == ':' {
                     continue;
                 }
                 if punct == ',' || punct == ';' {
