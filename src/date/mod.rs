@@ -124,3 +124,54 @@ fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> R
     }
     Ok(time_stamp)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use quote::quote;
+    use crate::Result;
+
+    #[test]
+    fn test_parse_date() -> Result<()> {
+        let mut tokens = quote!(2024-10-01).into_iter().peekable();
+        let date = parse_date(&mut tokens)?;
+        assert_eq!(date, 1_727_740_800);
+        Ok(())
+    }
+
+    #[cfg(feature = "and-time")]
+    #[test]
+    fn test_parse_date_time() -> Result<()> {
+        let mut tokens = quote!(2024-10-01@9:00).into_iter().peekable();
+        let date = parse_date(&mut tokens)?;
+        assert_eq!(date, 1_727_740_800 + 9 * ONE_HOUR);
+        Ok(())
+    }
+
+    #[cfg(feature = "and-time")]
+    #[test]
+    fn test_parse_date_time_without_colon() -> Result<()> {
+        let mut tokens = quote!(2024-10-01@9 10).into_iter().peekable();
+        let date = parse_date(&mut tokens)?;
+        assert_eq!(date, 1_727_740_800 + 9 * ONE_HOUR + 10 * 60);
+        Ok(())
+    }
+
+    #[cfg(feature = "and-time")]
+    #[test]
+    fn test_parse_date_at_time() -> Result<()> {
+        let mut tokens = quote!(2024-10-01 at 9:00).into_iter().peekable();
+        let date = parse_date(&mut tokens)?;
+        assert_eq!(date, 1_727_740_800 + 9 * ONE_HOUR);
+        Ok(())
+    }
+
+    #[cfg(feature = "and-time")]
+    #[test]
+    fn test_parse_date_at_time_without_colon() -> Result<()> {
+        let mut tokens = quote!(2024-10-01 at 9 02).into_iter().peekable();
+        let date = parse_date(&mut tokens)?;
+        assert_eq!(date, 1_727_740_800 + 9 * ONE_HOUR + 2 * 60);
+        Ok(())
+    }
+}
