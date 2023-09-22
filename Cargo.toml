@@ -1,6 +1,6 @@
 [package]
 name = "todo2"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT OR Unlicense"
 authors = ["Anas Elgarhy <anas.elgarhy.dev@gmail.com>"]
