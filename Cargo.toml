@@ -2,6 +2,15 @@
 name = "todo2"
 version = "0.1.0"
 edition = "2021"
+license = "MIT OR Unlicense"
+authors = ["Anas Elgarhy <anas.elgarhy.dev@gmail.com>"]
+description = "An enhanced todo macro inspired by todo_or_die"
+repository = "https://github.com/0x61nas/todo2"
+documentation = "https://docs.rs/todo2"
+keywords = ["todo", "todo-or-die"]
+categories = ["development-tools", "macros"]
+include = ["LICENSE", "LICENSE-UNLICENSE"]
+exclude = ["tests/*"]
 
 [dependencies.chrono]
 version = "0.4.30"
