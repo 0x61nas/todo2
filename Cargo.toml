@@ -9,6 +9,7 @@ repository = "https://github.com/0x61nas/todo2"
 documentation = "https://docs.rs/todo2"
 keywords = ["todo", "todo-or-die"]
 categories = ["development-tools", "macros"]
+rust-version = "1.67.1"
 
 [dependencies.chrono]
 version = "0.4.30"
