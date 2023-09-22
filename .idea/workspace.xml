@@ -18,8 +18,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9658fb60-19bd-40bb-acc2-fc79c34f64a8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/mergify.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/mergify.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,7 +197,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1695257329562</updated>
-      <workItem from="1695257332107" duration="52130000" />
+      <workItem from="1695257332107" duration="55129000" />
     </task>
     <servers />
   </component>
