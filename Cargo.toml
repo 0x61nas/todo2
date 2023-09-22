@@ -1,6 +1,6 @@
 [package]
 name = "todo2"
-version = "0.1.0"
+version = "0.1.2"
 edition = "2021"
 license = "MIT OR Unlicense"
 authors = ["Anas Elgarhy <anas.elgarhy.dev@gmail.com>"]
@@ -9,8 +9,7 @@ repository = "https://github.com/0x61nas/todo2"
 documentation = "https://docs.rs/todo2"
 keywords = ["todo", "todo-or-die"]
 categories = ["development-tools", "macros"]
-include = ["LICENSE", "LICENSE-UNLICENSE", "src/*"]
-exclude = ["tests/*"]
+rust-version = "1.67.1"
 
 [dependencies.chrono]
 version = "0.4.30"
@@ -45,4 +44,8 @@ and-time = []
 [lib]
 proc-macro = true
 path = "src/lib.rs"
+doc-scrape-examples = false
 
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+rustdoc-args = ["--generate-link-to-definition"]
