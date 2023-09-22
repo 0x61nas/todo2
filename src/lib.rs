@@ -44,8 +44,8 @@
 //! - `and-time` - allows you to specify a specific time of the day in the `by` condition
 //! - `original-compatibility` - Allows you to use this macro without pass any arguments, or with only the message.
 //! - `strict-syntax` - Enables the strict syntax,, just too force you to put a comma or a semicolon after the message.
-//! - `chrono-backend` - Use the `chrono` as the backend instead of the default implementation for the `by` condition to calculate the unix time stamp. I prefer to enable this feature if I have chrono in the dependencies, because it's more accurate than the default implementation. [Read more](#Backends)
-//! - `time-backend` - Use the `time` as the backend instead of the default implementation for the `by` condition to calculate the unix time stamp. I prefer to enable this feature if I have time in the dependencies, because it's more accurate than the default implementation. [Read more](#Backends)
+//! - `chrono-backend` - Use the `chrono` as the backend instead of the default implementation for the `by` condition to calculate the unix time stamp. I prefer to enable this feature if I have chrono in the dependencies, because it's more accurate than the default implementation. [Read more](#backends)
+//! - `time-backend` - Use the `time` as the backend instead of the default implementation for the `by` condition to calculate the unix time stamp. I prefer to enable this feature if I have time in the dependencies, because it's more accurate than the default implementation. [Read more](#backends)
 //! - `am-cool` - To indicate that you are cool. I love you.
 //!
 //! The default features are: `original-compatibility`, `strict-syntax`, `and-time`, `time-backend`.
