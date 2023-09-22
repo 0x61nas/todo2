@@ -12,7 +12,7 @@ categories = ["development-tools", "macros"]
 rust-version = "1.67.1"
 
 [dependencies.chrono]
-version = "0.4.30"
+version = "0.4.31"
 optional = true
 
 [dependencies.time]
