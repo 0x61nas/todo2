@@ -128,12 +128,12 @@ fn _parse<C: UnixTimeCalc>(tokens: &mut Peekable<IntoIter>, mut un_calc: C) -> R
 #[cfg(test)]
 mod tests {
     use super::*;
-    use quote::quote;
     use crate::Result;
+    use quote::quote;
 
     #[test]
     fn test_parse_date() -> Result<()> {
-        let mut tokens = quote!(2024-10-01).into_iter().peekable();
+        let mut tokens = quote!(2024 - 10 - 01).into_iter().peekable();
         let date = parse_date(&mut tokens)?;
         assert_eq!(date, 1_727_740_800);
         Ok(())
