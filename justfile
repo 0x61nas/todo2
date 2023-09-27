@@ -36,7 +36,7 @@ test:
 
 
 # Check the program with all features enabled.
-@check:
+check:
     cargo check
     cargo deny check
     cargo deny check licenses
