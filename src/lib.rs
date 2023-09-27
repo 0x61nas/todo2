@@ -266,8 +266,6 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
     };
 
     let mut rt = quote!();
-
-    // let mut time_stamp = 0;
     for condition in conditions {
         match condition {
             ConditionTyp::By(time) => {
@@ -332,7 +330,6 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
                         });
                     }
                 }
-                // time_stamp = time;
             }
             ConditionTyp::If(if_cond) => {
                 let msg = format!("TODO: {}", msg);
@@ -344,15 +341,6 @@ pub fn todo(tokens: TokenStream) -> TokenStream {
             }
         }
     }
-    /*let ct = SystemTime::now()
-        .duration_since(SystemTime::UNIX_EPOCH)
-        .unwrap()
-        .as_secs();
-    rt = quote! {
-        println!("TODO: {}", #msg);
-        println!("TODO: {}", #time_stamp);
-        println!("TODO: {}", #ct);
-    };*/
 
     TokenStream::from(rt)
 }
