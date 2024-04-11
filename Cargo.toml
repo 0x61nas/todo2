@@ -16,7 +16,7 @@ version = "0.4.37"
 optional = true
 
 [dependencies.time]
-version = "0.3.35"
+version = "0.3.36"
 optional = true
 
 [dependencies.quote]
