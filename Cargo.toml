@@ -24,7 +24,7 @@ version = "1.0.37"
 features = ["proc-macro"]
 
 [dependencies.proc-macro2]
-version = "1.0.86"
+version = "1.0.87"
 
 [features]
 default = ["original-compatibility", "strict-syntax", "and-time", "time-backend"]
