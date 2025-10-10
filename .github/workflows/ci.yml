@@ -75,7 +75,7 @@ jobs:
           - { OS: macos-11, TOOLCHAIN: stable, TARGET: aarch64-apple-darwin }
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -133,10 +133,10 @@ jobs:
     steps:
       - name: Checkout the repository
         if: github.event_name != 'pull_request'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Checkout the repository
         if: github.event_name == 'pull_request'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
