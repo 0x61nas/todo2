@@ -20,7 +20,7 @@ version = "0.3.44"
 optional = true
 
 [dependencies.quote]
-version = "1.0.41"
+version = "1.0.42"
 features = ["proc-macro"]
 
 [dependencies.proc-macro2]
